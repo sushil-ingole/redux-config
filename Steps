@@ -1,0 +1,122 @@
+1. Setup Redux in your React application:
+   npm install redux react-redux | yarn add redux react-redux
+2. Create Redux actions:
+   -    Define action types for incrementing, decrementing, and resetting the counter.
+   -    Create action creators for each action type. Action creators are functions that return 
+        action objects.
+
+   -    // ActionTypes.js
+        export const INCREMENT = 'INCREMENT';
+        export const DECREMENT = 'DECREMENT';
+        export const RESET = 'RESET';
+
+   -    // actions.js
+        import { INCREMENT, DECREMENT, RESET } from './ActionTypes';
+
+        export const increment = () => ({
+            type: INCREMENT
+        });
+
+        export const decrement = () => ({
+            type: DECREMENT
+        });
+
+        export const reset = () => ({
+            type: RESET
+        });
+ 
+3.  Create Redux reducers:
+    -   Define a reducer function that specifies how the state should change in response to actions.
+    -   Initialize the initial state with a counter value.
+    -   // reducers.js
+        import { INCREMENT, DECREMENT, RESET } from './ActionTypes';
+
+        const initialState = {
+            count: 0
+        };
+
+        const counterReducer = (state = initialState, action) => {
+            switch (action.type) {
+                case INCREMENT:
+                    return { ...state, count: state.count + 1 };
+                case DECREMENT:
+                    return { ...state, count: state.count - 1 };
+                case RESET:
+                    return { ...state, count: 0 };
+                default:
+                    return state;
+            }
+        };
+
+        export default counterReducer;
+
+4.  Combine reducers (if you have multiple reducers):
+    -   If you have multiple reducers, combine them using combineReducers from Redux.
+    
+    -   // rootReducer.js
+        import { combineReducers } from 'redux';
+        import counterReducer from './reducers';
+
+        const rootReducer = combineReducers({
+            counter: counterReducer
+        });
+
+        export default rootReducer;
+
+5.  Create Redux store:
+    -   Create a Redux store using createStore from Redux and pass it the combined reducer(s).
+
+    -   // store.js
+        import { createStore } from 'redux';
+        import rootReducer from './rootReducer';
+
+        const store = createStore(rootReducer);
+
+        export default store;
+
+6.  Integrate Redux store with React:
+    -   Wrap your React application with the Provider component from react-redux and pass it the 
+        Redux store.
+
+    -   // index.js
+        import React from 'react';
+        import ReactDOM from 'react-dom';
+        import { Provider } from 'react-redux';
+        import store from './store';
+        import App from './App';
+
+        ReactDOM.render(
+            <Provider store={store}>
+                <App />
+            </Provider>,
+            document.getElementById('root')
+        );
+
+7.  Create React components:
+    -   Create React components for your counter app, including buttons to increment, decrement, 
+        and reset the counter, and display the counter value.
+    
+    -   // Counter.js
+        import React from 'react';
+        import { useSelector, useDispatch } from 'react-redux';
+        import { increment, decrement, reset } from './actions';
+
+        const Counter = () => {
+            const count = useSelector(state => state.counter.count);
+            const dispatch = useDispatch();
+
+            return (
+                <div>
+                    <h1>Counter: {count}</h1>
+                    <button onClick={() => dispatch(increment())}>Increment</button>
+                    <button onClick={() => dispatch(decrement())}>Decrement</button>
+                    <button onClick={() => dispatch(reset())}>Reset</button>
+                </div>
+            );
+        };
+
+        export default Counter;
+
+
+
+
